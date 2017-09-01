@@ -12,6 +12,11 @@
 	}
 }
 
+#wordDiv {
+	color: white;
+	font-weight: bold;
+	font-size: 3em;
+}
 
 body {
     line-height: 2em;
