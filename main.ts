@@ -6,6 +6,7 @@ var taskDiv: HTMLDivElement;
 var wordDiv: HTMLDivElement;
 const boom = new Audio("bomb.mp3");
 
+var remCardList: string[] = [];
 
 window.onload = () => {
     startButton = document.getElementById("startButton") as HTMLButtonElement;
@@ -13,9 +14,13 @@ window.onload = () => {
     maxField = document.getElementById("max") as HTMLInputElement;
     taskDiv = document.getElementById("taskDiv") as HTMLDivElement;
     wordDiv = document.getElementById("wordDiv") as HTMLDivElement;
+    addAllCardsToRemList();
     reset();
 }
 
+function addAllCardsToRemList() {
+    fullCardList.forEach(c => remCardList.push(c));
+}
 
 function setInputDisabled(disable = true) {
     startButton.disabled = disable;
@@ -25,8 +30,16 @@ function setInputDisabled(disable = true) {
     maxField.disabled = disable;
 }
 
+function getRandomEntryIndex<T>(arr: T[]) {
+    return Math.floor(Math.random()*arr.length)
+}
+
 function getRandomEntry<T>(arr: T[]) {
-    return arr[Math.floor(Math.random()*arr.length)]
+    return arr[getRandomEntryIndex(arr)]
+}
+
+function removeRandomEntry<T>(arr: T[]) {
+    return arr.splice(getRandomEntryIndex(arr), 1)[0];
 }
 
 function reset() {
@@ -47,8 +60,9 @@ function start() {
     setInputDisabled(true);
     taskDiv.style.color = "white";
     document.body.style.background = "green";
-    wordDiv.innerText = getRandomEntry(cardList).toUpperCase();
-
+    if (remCardList.length == 0) addAllCardsToRemList();
+    wordDiv.innerText = removeRandomEntry(remCardList).toUpperCase();
+    
     const from = parseInt(minField.value);
     const to = parseInt(maxField.value);
 
@@ -66,7 +80,7 @@ const taskList =
 ];
 
 
-const cardList = [
+const fullCardList = [
     "lt",
     "hin",
     "sl",

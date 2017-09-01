@@ -5,14 +5,19 @@ var maxField;
 var taskDiv;
 var wordDiv;
 var boom = new Audio("bomb.mp3");
+var remCardList = [];
 window.onload = function () {
     startButton = document.getElementById("startButton");
     minField = document.getElementById("min");
     maxField = document.getElementById("max");
     taskDiv = document.getElementById("taskDiv");
     wordDiv = document.getElementById("wordDiv");
+    addAllCardsToRemList();
     reset();
 };
+function addAllCardsToRemList() {
+    fullCardList.forEach(function (c) { return remCardList.push(c); });
+}
 function setInputDisabled(disable) {
     if (disable === void 0) { disable = true; }
     startButton.disabled = disable;
@@ -21,8 +26,14 @@ function setInputDisabled(disable) {
     minField.disabled = disable;
     maxField.disabled = disable;
 }
+function getRandomEntryIndex(arr) {
+    return Math.floor(Math.random() * arr.length);
+}
 function getRandomEntry(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
+    return arr[getRandomEntryIndex(arr)];
+}
+function removeRandomEntry(arr) {
+    return arr.splice(getRandomEntryIndex(arr), 1)[0];
 }
 function reset() {
     document.body.style.background = "white";
@@ -39,7 +50,9 @@ function start() {
     setInputDisabled(true);
     taskDiv.style.color = "white";
     document.body.style.background = "green";
-    wordDiv.innerText = getRandomEntry(cardList).toUpperCase();
+    if (remCardList.length == 0)
+        addAllCardsToRemList();
+    wordDiv.innerText = removeRandomEntry(remCardList).toUpperCase();
     var from = parseInt(minField.value);
     var to = parseInt(maxField.value);
     var seconds = Math.random() * (to - from) + from;
@@ -50,7 +63,7 @@ var taskList = [
     "Må ikke være i slutningen af ordet",
     "Må være overalt i ordet",
 ];
-var cardList = [
+var fullCardList = [
     "lt",
     "hin",
     "sl",
